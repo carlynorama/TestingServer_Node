@@ -1,5 +1,7 @@
 Needed a local testing server for Server Sent Events and other dynamic endpoints. 
 
+This is not a production server and makes no security checks on the URLs.
+
 NOTE: If only serving static files, use `python3 -m http.server` or `python -m SimpleHTTPServer` [More Info](https://docs.python.org/3/library/http.server.html#module-http.server)
 
 ## Current Endpoints
