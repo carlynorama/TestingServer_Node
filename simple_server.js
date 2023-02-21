@@ -10,35 +10,6 @@ var path = require('path');
 
 var http_port =  8000
 
-const MIME_TYPES = {
-    default: 'application/octet-stream',
-    html: 'text/html; charset=UTF-8',
-    js: 'application/javascript',
-    css: 'text/css',
-    png: 'image/png',
-    jpg: 'image/jpg',
-    gif: 'image/gif',
-    ico: 'image/x-icon',
-    svg: 'image/svg+xml',
-  };
-
-const toBool = [() => true, () => false];
-
-const STATIC_PATH = path.join(process.cwd(), './static');
-
-  const prepareFile = async (url) => {
-    const paths = [STATIC_PATH, url];
-    if (url.endsWith('/')) paths.push('index.html');
-    const filePath = path.join(...paths);
-    const pathTraversal = !filePath.startsWith(STATIC_PATH);
-    const exists = await fs.promises.access(filePath).then(...toBool);
-    const found = !pathTraversal && exists;
-    const streamPath = found ? filePath : STATIC_PATH + '/404.html';
-    const ext = path.extname(streamPath).substring(1).toLowerCase();
-    const stream = fs.createReadStream(streamPath);
-    return { found, ext, stream };
-  };
-
 console.log("starting server on port "+http_port)
 
 http.createServer(async function(req, res) {
@@ -63,6 +34,7 @@ http.createServer(async function(req, res) {
     }
 }).listen(http_port);
 
+// -----------------------------------------------  SSE 
 function sendSSE(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
@@ -84,3 +56,33 @@ function constructSSE(res, id, event_type, data) {
     res.write('event: ' + event_type + '\n');
     res.write("data: " + data + '\n\n');
 }
+
+// -----------------------------------------------  Serving Files
+const MIME_TYPES = {
+    default: 'application/octet-stream',
+    html: 'text/html; charset=UTF-8',
+    js: 'application/javascript',
+    css: 'text/css',
+    png: 'image/png',
+    jpg: 'image/jpg',
+    gif: 'image/gif',
+    ico: 'image/x-icon',
+    svg: 'image/svg+xml',
+  };
+
+const toBool = [() => true, () => false];
+
+const STATIC_PATH = path.join(process.cwd(), './static');
+
+const prepareFile = async (url) => {
+    const paths = [STATIC_PATH, url];
+    if (url.endsWith('/')) paths.push('index.html');
+    const filePath = path.join(...paths);
+    const pathTraversal = !filePath.startsWith(STATIC_PATH);
+    const exists = await fs.promises.access(filePath).then(...toBool);
+    const found = !pathTraversal && exists;
+    const streamPath = found ? filePath : STATIC_PATH + '/404.html';
+    const ext = path.extname(streamPath).substring(1).toLowerCase();
+    const stream = fs.createReadStream(streamPath);
+    return { found, ext, stream };
+};
