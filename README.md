@@ -1,7 +1,12 @@
+## Current Endpoints
+
+- `/events` sse server
+- `/large_file.png` if a static folder exists, and if it has a file called large_file.png in it, this URI will serve it up. It would be trivial to expand to any file in that folder. 
 
 
 ## References
 - https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework
+- https://web.dev/eventsource-basics/ via https://gist.github.com/todbot/4fbb2a3e2c273de0005b28a953e0de71
 
 
 ## Project Start Up
