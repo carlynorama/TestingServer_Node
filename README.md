@@ -17,7 +17,7 @@
         git init
         git branch -M main
         touch README.md
-        #add node_modules/, .DS_Store to the below
+        #add node_modules/, .DS_Store, static/ to the below
         touch .gitignore
         git add .
         git commit -m "hello project"
